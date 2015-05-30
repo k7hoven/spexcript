@@ -55,6 +55,7 @@ class Character(Container):
     def _set_title_data(self, title_data):
         self.display_name = title_data[0][0]
         self.abbreviations = title_data[0][1:]
+        print (self.display_name, self.abbreviations)
         self.full_name = title_data[1]
         
     def generate_text(self, width=79):

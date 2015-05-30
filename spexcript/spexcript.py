@@ -6,7 +6,7 @@ Created in 2013
 @author: Koos Zevenhoven
 """
 from __future__ import unicode_literals
-
+import re
 #TODO: more automatic generation of this stuff (eliminate redundant info)
 #The main issue is how to deal with alternate control keys ("<" and "\\")
 
@@ -51,7 +51,7 @@ for i in range(len(container_hierarchy) - 1):
     for key in container_hierarchy[i]:
         can_contain[key] = can
         cant_contain[key] = cant
-del can, cant, cl, c, key, i
+del can, cant, key, i
 
 def split_key(titleline):
     """Identify and separate container key of the given titleline.
@@ -142,6 +142,15 @@ def load_spexcript(inputfile, first_line_number = 1):
     from layout import Spexcript
     return Spexcript(filewrapper)
 
+def multiple_replacer(replace_dict):
+    replacement_function = lambda match: replace_dict[match.group(0)]
+    pattern = re.compile("|".join(
+        re.escape(k) for k, v in replace_dict.iteritems()), re.M
+    )
+    return lambda string: pattern.sub(replacement_function, string)
+
+def multiple_replace(string, replace_dict):
+    return multiple_replacer(replace_dict)(string)
 
 def parse_filewrapper(filewrapper, parent = None):
     """Return generator to parse Containers from spexdown filewrapper source.
@@ -165,9 +174,14 @@ def parse_filewrapper(filewrapper, parent = None):
     # contents of Text are simply paragraphs -> handle separately
     # may need to move this functionality to Container.parse to allow
     # commands/containers inside paragraphs
-    
     if parent != None and container_keys[parent.key] == "Text":
+        replacer = multiple_replacer(
+            {'@' + c: '@' + char 
+                for c, char in parent.get_name_dict().iteritems()}
+        )
+        
         for par in get_paragraphs(filewrapper):
+            par = replacer(par)            
             yield par
         return
 
@@ -229,7 +243,7 @@ def parse_chain(data):
     delims = ["&", "(", ")", ","]    
     for d in delims:
         data = split_chain(data, d)
-    return list(data), rest
+    return list(filter(lambda x: x != '', data)), rest
     
 
 class Container(object):
@@ -501,7 +515,7 @@ if __name__ == "__main__":
     tex = spextex.final_result()
     import latex
     latex.pdflatex(tex)
-    latex.acroread()    
+    latex.show()    
     
 #    txt = spex.generate_text()
 #   with open("output.txt","w") as f:

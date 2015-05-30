@@ -324,7 +324,9 @@ class Spextex(object):
         self.latex_data.append(r"\scripttitle{%s}" % self._lang.SCRIPT)
         
 PDFLATEX = r"C:\Program Files (x86)\MiKTeX 2.9\miktex\bin\pdflatex.exe"
-ACROREAD = r"C:\Program Files (x86)\Adobe\Reader 10.0\Reader\AcroRd32.exe"
+#ACROREAD = r"C:\Program Files (x86)\Adobe\Reader 10.0\Reader\AcroRd32.exe"
+PDFLATEX = 'pdflatex'
+#ACROREAD = 'acroread'
 
 def pdflatex(latex_unicode):
     with open(r"tmp/spex.tex", "w") as f:
@@ -332,9 +334,9 @@ def pdflatex(latex_unicode):
     from subprocess import Popen
     Popen(["pdflatex", r"spex.tex"], cwd = "tmp").wait()
     
-def acroread():
-    from subprocess import Popen
-    Popen([ACROREAD, r"spex.pdf"], cwd = "tmp")
+def show():
+    import os
+    os.startfile(r"tmp/spex.pdf")
     
     
     
