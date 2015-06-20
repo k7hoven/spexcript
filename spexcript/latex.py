@@ -336,7 +336,8 @@ def pdflatex(latex_unicode):
     
 def show():
     import os
-    os.startfile(r"tmp/spex.pdf")
+    import os.path
+    os.startfile(os.path.join("tmp", "spex.pdf"))
     
     
     
