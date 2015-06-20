@@ -6,6 +6,7 @@ Tools for creating plain text spextex output.
 
 @author: Koos Zevenhoven
 """
+from __future__ import unicode_literals, print_function, division
 import textwrap
 
 line_end = "\r\n"

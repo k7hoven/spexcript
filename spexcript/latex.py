@@ -6,7 +6,7 @@ Latex code templates for typesetting a spexdown script.
 
 @author: Koos Zevenhoven
 """
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, division
 
 latex_preamble1 = """
 \documentclass[a4paper,11pt,twocolumn]{article}
@@ -15,7 +15,7 @@ latex_preamble1 = """
 
 # Had to convert from byte string, as \u in \usepackage would be interpreted
 # as a unicode code point escape. This problem will be gone in Py3k (PEP414)
-latex_preamble2 = unicode(br"""
+latex_preamble2 = br"""
 
 \makeatletter
 \newcommand{\needspace}[1]{%
@@ -142,7 +142,7 @@ latex_preamble2 = unicode(br"""
 \clubpenalty=1000
 
 \begin{document}
-""")
+""".decode('ascii')
 
 latex_end = r"""
 \end{document}
@@ -329,8 +329,8 @@ PDFLATEX = 'pdflatex'
 #ACROREAD = 'acroread'
 
 def pdflatex(latex_unicode):
-    with open(r"tmp/spex.tex", "w") as f:
-        f.write(latex_unicode.encode("utf8"))
+    with open(r"tmp/spex.tex", "w", encoding = 'utf8') as f:
+        f.write(latex_unicode)
     from subprocess import Popen
     Popen(["pdflatex", r"spex.tex"], cwd = "tmp").wait()
     

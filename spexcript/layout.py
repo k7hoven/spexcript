@@ -4,7 +4,7 @@ Created on Sat Feb 02 16:44:12 2013
 
 @author: Koos Zevenhoven
 """
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, division
 
 from spexcript import Container
 from abc import ABCMeta, abstractmethod

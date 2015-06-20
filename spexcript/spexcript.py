@@ -5,8 +5,9 @@ Created in 2013
 
 @author: Koos Zevenhoven
 """
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function, division
 import re
+import six
 #TODO: more automatic generation of this stuff (eliminate redundant info)
 #The main issue is how to deal with alternate control keys ("<" and "\\")
 
@@ -64,6 +65,8 @@ def split_key(titleline):
     #TODO : SYNTAX REFINEMENT: SHOULD WE ALLOW WHITESPACE BEFORE KEY (now yes)
     for key in container_test_order:
         if titleline.lstrip().startswith(key):
+            # NOTE: lstrip strips the characters in any combination, so
+            # the first whitespace character should end stripping.
             return (key, titleline.lstrip().lstrip(key))
     return "", titleline
 
@@ -114,13 +117,14 @@ def filewrap(inputfile, first_line_number = 1, coding = "utf8"):
     curly_level = 0
     with inputfile:
         for line in inputfile:
-            line = line.decode(coding)
+            if isinstance(line, six.binary_type):
+                line = line.decode(coding)
             line, curly_level = handle_curly_comments(line, curly_level)
             if line == None:
                 continue
             push_back = yield (line_number, line)
             while push_back != None:
-                if isinstance(push_back, unicode):
+                if isinstance(push_back, six.text_type):
                     line = push_back
                 yield line_number # send returns only the line number
                 push_back = yield (line_number,line) # re-yield the line on following next
@@ -143,9 +147,11 @@ def load_spexcript(inputfile, first_line_number = 1):
     return Spexcript(filewrapper)
 
 def multiple_replacer(replace_dict):
+    #TODO need to properly handle delimiter after character name or abbr.
+    replace_items = sorted(replace_dict.items(), key = lambda x: -len(x[0]))
     replacement_function = lambda match: replace_dict[match.group(0)]
     pattern = re.compile("|".join(
-        re.escape(k) for k, v in replace_dict.iteritems()), re.M
+        re.escape(k) for k, v in replace_items), re.M
     )
     return lambda string: pattern.sub(replacement_function, string)
 
@@ -177,7 +183,7 @@ def parse_filewrapper(filewrapper, parent = None):
     if parent != None and container_keys[parent.key] == "Text":
         replacer = multiple_replacer(
             {'@' + c: '@' + char 
-                for c, char in parent.get_name_dict().iteritems()}
+                for c, char in parent.get_name_dict().items()}
         )
         
         for par in get_paragraphs(filewrapper):
@@ -331,7 +337,7 @@ class Container(object):
         from weakref import proxy
         self.parent = proxy(parent) if parent != None else None
 
-        linenum, title_line = filewrapper.next()
+        linenum, title_line = next(filewrapper)
         self.key,rest = split_key(title_line)
                 
         if key != None:
@@ -498,7 +504,7 @@ class Container(object):
 
 
 def read_spex_file(filename):
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding = 'utf8') as f:
         spexcript = load_spexcript(f)
     return spexcript # the spex itself
 
