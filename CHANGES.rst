@@ -2,7 +2,7 @@ Changelog
 =========
 
 0.2.0 (2015-06-17) -- SpeXcript
------------------------------
+-------------------------------
 
  - Rebranded as SpeXcript
  - Python 3 compatibility (3.4)

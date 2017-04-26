@@ -143,7 +143,7 @@ def load_spexcript(inputfile, first_line_number = 1):
         first_line_number -- number of the next line in inputfile (if not 1)
     """
     filewrapper = filewrap(inputfile, first_line_number)
-    from layout import Spexcript
+    from .layout import Spexcript
     return Spexcript(filewrapper)
 
 def multiple_replacer(replace_dict):
@@ -307,7 +307,8 @@ class Container(object):
             parent -- the parent Container that will contain this object
             key -- string/character determining container type (default: read from data)
         """
-        import layout
+        from . import layout
+
         
         if key == None:
             #determine class from data
@@ -450,7 +451,7 @@ class Container(object):
         return list(self._contents)
 
     def get_name_dict(self):
-        from layout import Character
+        from .layout import Character
         if self.parent == None:
             return dict()
         
@@ -468,12 +469,12 @@ class Container(object):
         return names
     
     def contains_sections(self):
-        from layout import Section
+        from .layout import Section
         return any(isinstance(c, Section) for c in self._contents)
         
     def get_level_inner(self):
         #TODO should this be w.r.t. most inner level of whole spexcript?
-        from layout import Section
+        from .layout import Section
         if not isinstance(self, Section):
             return 0
         
@@ -486,7 +487,7 @@ class Container(object):
                 [self.parent._contents.index(self)])
      
     def get_section_numbering(self):
-        from layout import Section
+        from .layout import Section
         if self.parent == None:
             return []
         i = 0
@@ -511,15 +512,15 @@ def read_spex_file(filename):
 if __name__ == "__main__":
     import sys
     spex = read_spex_file(sys.argv[1])
-    from language import Finnish
-    from latex import Spextex
+    from .language import Finnish
+    from .latex import Spextex
     spextex = Spextex(Finnish)
     spex.generate_front_page(spextex)
     spex.generate_characters(spextex)
     spex.generate_listing(spextex)
     spex.generate_script(spextex)
     tex = spextex.final_result()
-    import latex
+    from . import latex
     latex.pdflatex(tex)
     latex.show()    
     

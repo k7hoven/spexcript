@@ -9,7 +9,7 @@ Latex code templates for typesetting a spexdown script.
 from __future__ import unicode_literals, print_function, division
 
 latex_preamble1 = """
-\documentclass[a4paper,11pt,twocolumn]{article}
+\documentclass[a5paper,11pts]{article}
 """
 #TODO can I get rid of color or wasysym (used for \twonotes and \eighthnote)
 
@@ -38,10 +38,11 @@ latex_preamble2 = br"""
 \usepackage{wasysym}
 
 \addtolength\columnsep{0.5cm}
-\usepackage[landscape, left=1.4cm, top=1.5cm, right=1.4cm, nohead]{geometry}
+\usepackage[portrait, left=1.4cm, top=1.5cm, right=1.4cm, nohead]{geometry}
 
 \newcommand{\scripttitle}[1]{
-    \twocolumn
+    %\twocolumn
+    \newpage
     {{\noindent { \texttt{\Huge #1}}}\vspace{3.5cm}\phantom{joo} \\ }
     \newpage
 }
@@ -153,7 +154,7 @@ par_delimiter = "\n\n" r"\noindent\hspace{5mm}"
 song_symbol = r"\twonotes "
 music_symbol = r"\eighthnote "
 
-VERSION = r"$spex\tau\epsilon\chi\,2\,beta$"
+VERSION = r"$spe\chi cript\,0.2\,beta$"
 
 class Spextex(object):
     """An object for encoding spexcript elements into a latex source."""
@@ -209,7 +210,7 @@ class Spextex(object):
                 \end{tabular}
                 \vspace{1.5cm}
                 
-                \hspace*{5cm}""" + OWNER_OF_COPY + r""" 
+                \hspace*{2cm}""" + OWNER_OF_COPY + r""" 
                 """ "\\u" r"""nderline{""" + (r"\ " * 38) + r"""}\\
 
             \end{center}

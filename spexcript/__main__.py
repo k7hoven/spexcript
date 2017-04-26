@@ -1,6 +1,7 @@
 from __future__ import unicode_literals, print_function
 
 def read_spex_file(filename):
+    from .base import load_spexcript
     with open(filename, "r", encoding = 'utf8') as f:
         spexcript = load_spexcript(f)
     return spexcript # the spex itself

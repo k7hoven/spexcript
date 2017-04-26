@@ -22,7 +22,7 @@ class Finnish:
     DATE = "Päiväys"
     OWNER_OF_COPY = "Tämän kappaleen omistaja: "
     SLOGAN = "hyvä -- ei kämäinen."
-    EXTRA = r"Pian Spe$\chi$cript 0.2!"
+    EXTRA = r"Oli $spex\tau\epsilon\chi\,2\,beta$!"
     
     @staticmethod
     def act_title(number, title):
