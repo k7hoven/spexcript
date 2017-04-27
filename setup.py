@@ -16,7 +16,7 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="spexcript",
-    version='0.2',
+    version='0.3',
     description="Spexcript -- easy layout for theater scripts",
     url='https://github.com/k7hoven/spexcript',
     author='Koos Zevenhoven',

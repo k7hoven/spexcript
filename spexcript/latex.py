@@ -154,7 +154,7 @@ par_delimiter = "\n\n" r"\noindent\hspace{5mm}"
 song_symbol = r"\twonotes "
 music_symbol = r"\eighthnote "
 
-VERSION = r"$spe\chi cript\,0.2\,beta$"
+VERSION = r"$spe\chi cript\,0.3\,beta$"
 
 class Spextex(object):
     """An object for encoding spexcript elements into a latex source."""
@@ -329,12 +329,20 @@ PDFLATEX = r"C:\Program Files (x86)\MiKTeX 2.9\miktex\bin\pdflatex.exe"
 PDFLATEX = 'pdflatex'
 #ACROREAD = 'acroread'
 
-def pdflatex(latex_unicode):
-    with open(r"tmp/spex.tex", "w", encoding = 'utf8') as f:
+def pdflatex(latex_unicode, outputfile="output.pdf"):
+    from pathlib import Path
+    import shutil
+    tmp = Path("spexcript_tmp")
+    tmp.mkdir(exist_ok = True)
+    tex = tmp/"spex.tex"
+    with open(str(tex), "w", encoding = 'utf8') as f:
         f.write(latex_unicode)
-    from subprocess import Popen
-    Popen(["pdflatex", r"spex.tex"], cwd = "tmp").wait()
-    
+    from subprocess import Popen, PIPE
+    Popen(["pdflatex", r"spex.tex"], 
+          stdout=PIPE, stderr=PIPE, cwd = str(tmp)).communicate()
+    shutil.copy(str(tex.with_suffix(".pdf")),  outputfile)
+    shutil.rmtree(tmp)
+
 def show():
     import os
     import os.path
