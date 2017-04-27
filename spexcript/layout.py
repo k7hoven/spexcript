@@ -55,7 +55,6 @@ class Character(Container):
     def _set_title_data(self, title_data):
         self.display_name = title_data[0][0]
         self.abbreviations = title_data[0][1:]
-        print (self.display_name, self.abbreviations)
         self.full_name = title_data[1]
         
     def generate_text(self, width=79):
@@ -189,14 +188,21 @@ class Section(Container):
     
     def _generate_title(self, target, listing = False):
         numbering = self.get_section_numbering()
-        
-        pars = self._contents[0]._contents if listing else []
+        #TODO these ifs for len(numbering) are perhaps only a temporary fix
+        if len(numbering) < 1:
+            numbering = [0]
+        if hasattr(self, 'title'):
+            title = self.title
+        else:
+            title = "---"
+        pars = self._contents[0]._contents if listing and self._contents else []
         if self.contains_sections():
             if self.get_level_inner() <= 2:
-                target.act(numbering[-1], self.title, listing = listing)
+                target.act(numbering[-1], title, listing = listing)
         else:
-            #TODO what if scene not inside act
-            target.scene(numbering[-2], numbering[-1], self.title,
+            if len(numbering) < 2:
+                numbering = [0, 0]
+            target.scene(numbering[-2], numbering[-1], title,
                          people = self.get_characters_and_more(),
                          description_pars = pars,
                          listing = listing)
