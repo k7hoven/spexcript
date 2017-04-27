@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.3.0 (2017-04-27) -- SpeXcript
+-------------------------------
+
+ - Improve command-line interface
+ - Cleaner pdftex operation from user's perspective
+ - Spexcript succeeds even with empty source file
+ - Minor refactoring
+ - Filter out unwanted characters that can mess up typesetting
+
 0.2.0 (2015-06-17) -- SpeXcript
 -------------------------------
 
