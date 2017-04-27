@@ -54,6 +54,20 @@ for i in range(len(container_hierarchy) - 1):
         cant_contain[key] = cant
 del can, cant, key, i
 
+import string
+from collections import defaultdict
+accented = "àáéèôëüñåäö"
+control = "".join(c for c in container_keys if c is not None)
+control += "\n\t &{}[]()@"
+punctuation = ',:;?!\'\".%-*_/'
+allowed_chars = string.digits + string.ascii_letters + accented + accented.upper() + control + punctuation
+allowed_ords = [ord(c) for c in allowed_chars]
+allowed_table = defaultdict(lambda:None, zip(allowed_ords, allowed_ords))
+def make_valid_string(line):
+    """Remove invalid stuff from line"""
+    ret = line.translate(allowed_table)
+    return ret
+
 def split_key(titleline):
     """Identify and separate container key of the given titleline.
 
@@ -119,6 +133,7 @@ def filewrap(inputfile, first_line_number = 1, coding = "utf8"):
         for line in inputfile:
             if isinstance(line, six.binary_type):
                 line = line.decode(coding)
+            line = make_valid_string(line)
             line, curly_level = handle_curly_comments(line, curly_level)
             if line == None:
                 continue
@@ -253,7 +268,7 @@ def parse_chain(data):
     
 
 class Container(object):
-    """ Base class for all elements of a spexdown source. In the source, a
+    """ Base class for all elements of a spexscript source. In the source, a
     container typically starts with a key consisting of one or more characters.
     This key determines the type of container. The container called "Text" is
     an exception in the sense that it does not begin with a key: it just
@@ -502,28 +517,3 @@ class Container(object):
     
     def __repr__(self):
         return self.generate_text()
-
-
-def read_spex_file(filename):
-    with open(filename, "r", encoding = 'utf8') as f:
-        spexcript = load_spexcript(f)
-    return spexcript # the spex itself
-
-if __name__ == "__main__":
-    import sys
-    spex = read_spex_file(sys.argv[1])
-    from .language import Finnish
-    from .latex import Spextex
-    spextex = Spextex(Finnish)
-    spex.generate_front_page(spextex)
-    spex.generate_characters(spextex)
-    spex.generate_listing(spextex)
-    spex.generate_script(spextex)
-    tex = spextex.final_result()
-    from . import latex
-    latex.pdflatex(tex)
-    latex.show()    
-    
-#    txt = spex.generate_text()
-#   with open("output.txt","w") as f:
-#       f.write(txt.encode("utf8"))
