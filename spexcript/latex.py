@@ -341,7 +341,7 @@ def pdflatex(latex_unicode, outputfile="output.pdf"):
     Popen(["pdflatex", r"spex.tex"], 
           stdout=PIPE, stderr=PIPE, cwd = str(tmp)).communicate()
     shutil.copy(str(tex.with_suffix(".pdf")),  outputfile)
-    shutil.rmtree(tmp)
+    shutil.rmtree(str(tmp))
 
 def show():
     import os
