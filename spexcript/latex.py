@@ -173,7 +173,10 @@ class Spextex(object):
         #TODO handle underline emphasis somehow instead of just deleting
         replacements = [("_", r"{\textunderscore}"),
                         ("&", r"{\&}"),
-                        ('" ', r'{"\ }')]
+                        ('" ', r'{"\ }'),
+                        ('[', r'{$[$}'),
+                        (']', r'{$]$}'),
+        ]
         for rep in replacements:
             string = string.replace(*rep)
         return string
