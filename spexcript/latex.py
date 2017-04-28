@@ -171,7 +171,8 @@ class Spextex(object):
     
     def _process_string(self, string):
         #TODO handle underline emphasis somehow instead of just deleting
-        replacements = [("_", r"{\textunderscore}"),
+        replacements = [('$', r'{\$}'), # must be first!
+                        ("_", r"{\textunderscore}"),
                         ("&", r"{\&}"),
                         ('" ', r'{"\ }'),
                         ('[', r'{$[$}'),
@@ -198,7 +199,7 @@ class Spextex(object):
                                self._lang.DATE,
                                self._lang.OWNER_OF_COPY,
                                self._lang.SLOGAN, self._lang.EXTRA))        
-        
+        EXTRA = self._lang.EXTRA # bypass _process_string
         self.latex_data.append(r"""
         \begin{titlepage}
             \vspace*{\fill}
