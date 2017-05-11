@@ -17,15 +17,16 @@ Requirements
 ------------
 
 * Python 3.4 (May work with older versions, but no official support)
+* LaTeX (For pdf output)
 
 Installation
 ------------
 
-spexcript can be installed with ``pip`` (make sure you have it installed):
+spexcript can be installed with ``pi3``, often ``pip3`` for Python 3 (make sure you have it installed):
 
 .. code-block:: bash
 
-    $ pip install spexcript
+    $ pip3 install spexcript
 
 
 or directly from the source code:
@@ -34,7 +35,7 @@ or directly from the source code:
 
     $ git clone https://github.com/k7hoven/spexcript.git
     $ cd spexcript
-    $ python setup.py install 
+    $ python3 setup.py install 
 
 Basic Usage
 ===========
