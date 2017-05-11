@@ -17,7 +17,7 @@ Requirements
 ------------
 
 * Python 3.4 (May work with older versions, but no official support)
-* LaTeX (For pdf output)
+* ``pdflatex`` (For pdf output, pdflatex executable must be on the path)
 
 Installation
 ------------
@@ -26,16 +26,16 @@ spexcript can be installed with ``pi3``, often ``pip3`` for Python 3 (make sure 
 
 .. code-block:: bash
 
-    $ pip3 install spexcript
+    pip3 install spexcript
 
 
 or directly from the source code:
 
 .. code-block:: bash
 
-    $ git clone https://github.com/k7hoven/spexcript.git
-    $ cd spexcript
-    $ python3 setup.py install 
+    git clone https://github.com/k7hoven/spexcript.git
+    cd spexcript
+    python3 setup.py install 
 
 Basic Usage
 ===========
